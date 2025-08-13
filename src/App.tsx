@@ -64,7 +64,6 @@ function App() {
   const [isTransliterateMode, setIsTransliterateMode] = useState(true);
   const [inputScript, setInputScript] = useState<string>("itrans");
   const [outputScript, setOutputScript] = useState<string>("devanagari");
-  const [transliteratedText, setTransliteratedText] = useState<string>("");
   const [sanscriptInput, setSanscriptInput] = useState("");
   const [transliterationLang, setTransliterationLang] =
     useState<LanguageCode>("sa");
@@ -112,10 +111,7 @@ function App() {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Transliterate
-              lang={transliterationLang}
-              onChange={setTransliteratedText}
-            />
+            <Transliterate lang={transliterationLang} />
           </div>
         ) : (
           <div className="w-full overflow-y-auto max-h-[calc(100vh-250px)]">

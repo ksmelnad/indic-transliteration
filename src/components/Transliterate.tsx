@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   getTransliterateSuggestions,
   type LanguageCode,
@@ -8,7 +8,6 @@ import { Textarea } from "./ui/textarea";
 
 export interface TransliterateProps {
   lang: LanguageCode;
-  onChange: (text: string) => void;
 }
 
 // The properties that we copy into a mirrored div.
@@ -16,94 +15,100 @@ export interface TransliterateProps {
 // into their shorthand (e.g. padding-top, padding-bottom etc. -> padding),
 // so we have to list every single property explicitly.
 const properties = [
-  'direction',
-  'boxSizing',
-  'width',
-  'height',
-  'overflowX',
-  'overflowY',
+  "direction",
+  "boxSizing",
+  "width",
+  "height",
+  "overflowX",
+  "overflowY",
 
-  'borderTopWidth',
-  'borderRightWidth',
-  'borderBottomWidth',
-  'borderLeftWidth',
-  'borderStyle',
+  "borderTopWidth",
+  "borderRightWidth",
+  "borderBottomWidth",
+  "borderLeftWidth",
+  "borderStyle",
 
-  'paddingTop',
-  'paddingRight',
-  'paddingBottom',
-  'paddingLeft',
+  "paddingTop",
+  "paddingRight",
+  "paddingBottom",
+  "paddingLeft",
 
-  'fontStyle',
-  'fontVariant',
-  'fontWeight',
-  'fontStretch',
-  'fontSize',
-  'fontSizeAdjust',
-  'lineHeight',
-  'fontFamily',
+  "fontStyle",
+  "fontVariant",
+  "fontWeight",
+  "fontStretch",
+  "fontSize",
+  "fontSizeAdjust",
+  "lineHeight",
+  "fontFamily",
 
-  'textAlign',
-  'textTransform',
-  'textIndent',
-  'textDecoration',
+  "textAlign",
+  "textTransform",
+  "textIndent",
+  "textDecoration",
 
-  'letterSpacing',
-  'wordSpacing',
+  "letterSpacing",
+  "wordSpacing",
 
-  'tabSize',
-  'MozTabSize'
+  "tabSize",
+  "MozTabSize",
 ];
 
-const isBrowser = typeof window !== 'undefined';
+const isBrowser = typeof window !== "undefined";
 const isFirefox = isBrowser && (window as any).mozInnerScreenX != null;
 
-function getCaretCoordinates(element: HTMLTextAreaElement, position: number, options?: { debug?: boolean }) {
+function getCaretCoordinates(
+  element: HTMLTextAreaElement,
+  position: number,
+  options?: { debug?: boolean }
+) {
   if (!isBrowser) {
-    throw new Error('getCaretCoordinates should only be called in a browser');
+    throw new Error("getCaretCoordinates should only be called in a browser");
   }
 
-  const debug = options && options.debug || false;
+  const debug = (options && options.debug) || false;
   if (debug) {
-    const el = document.querySelector('#input-textarea-caret-position-mirror-div');
+    const el = document.querySelector(
+      "#input-textarea-caret-position-mirror-div"
+    );
     if (el) {
       el.parentNode?.removeChild(el);
     }
   }
 
-  const div = document.createElement('div');
-  div.id = 'input-textarea-caret-position-mirror-div';
+  const div = document.createElement("div");
+  div.id = "input-textarea-caret-position-mirror-div";
   document.body.appendChild(div);
 
   const style = div.style;
   const computed = window.getComputedStyle(element);
 
-  style.whiteSpace = 'pre-wrap';
-  style.wordWrap = 'break-word';
-  style.position = 'absolute';
-  if (!debug)
-    style.visibility = 'hidden';
+  style.whiteSpace = "pre-wrap";
+  style.wordWrap = "break-word";
+  style.position = "absolute";
+  if (!debug) style.visibility = "hidden";
 
   properties.forEach(function (prop) {
     style[prop as any] = computed[prop as any];
   });
 
   if (isFirefox) {
-    if (element.scrollHeight > parseInt(computed.height)) style.overflowY = 'scroll';
+    if (element.scrollHeight > parseInt(computed.height))
+      style.overflowY = "scroll";
   } else {
-    style.overflow = 'hidden';
+    style.overflow = "hidden";
   }
 
   div.textContent = element.value.substring(0, position);
 
-  const span = document.createElement('span');
-  span.textContent = element.value.substring(position) || '.';
+  const span = document.createElement("span");
+  span.textContent = element.value.substring(position) || ".";
   div.appendChild(span);
 
   const coordinates = {
-    top: span.offsetTop + parseInt(computed['borderTopWidth']),
-    left: span.offsetLeft + parseInt(computed['borderLeftWidth']),
-    height: parseInt(computed['lineHeight'])
+    top: span.offsetTop + parseInt(computed["borderTopWidth"]),
+    left: span.offsetLeft + parseInt(computed["borderLeftWidth"]),
+    height: parseInt(computed["lineHeight"]),
   };
 
   if (!debug) {
@@ -113,21 +118,16 @@ function getCaretCoordinates(element: HTMLTextAreaElement, position: number, opt
   return coordinates;
 }
 
-
-export const Transliterate: React.FC<TransliterateProps> = ({
-  lang,
-  onChange,
-}) => {
+export const Transliterate: React.FC<TransliterateProps> = ({ lang }) => {
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
-  const [suggestionsPosition, setSuggestionsPosition] = useState({ top: 0, left: 0 });
+  const [suggestionsPosition, setSuggestionsPosition] = useState({
+    top: 0,
+    left: 0,
+  });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    onChange(text);
-  }, [text, onChange]);
 
   const updateSuggestionsPosition = () => {
     if (textareaRef.current) {
