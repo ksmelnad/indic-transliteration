@@ -86,16 +86,16 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex-1 flex flex-col items-center py-8 px-4">
-        <div className="w-full max-w-5xl mx-auto space-y-6">
+      <div className="flex-1 flex flex-col items-center py-4 md:py-8 px-4">
+        <div className="w-full max-w-5xl mx-auto md:space-y-6 space-y-4">
           {/* Mode Switcher Card */}
-          <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-            <div className="flex items-center justify-between">
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6 border border-gray-200">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Translation Mode
+                <h2 className="text-base md:text-lg font-semibold text-gray-900">
+                  Transliteration Mode
                 </h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-xs md:text-sm text-gray-600 mt-1">
                   {isTransliterateMode
                     ? "Using Google Input Tools for real-time transliteration"
                     : "Using Sanscript for script conversion"}
@@ -103,7 +103,7 @@ function App() {
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5">
-                  <span className={`text-sm font-medium ${!isTransliterateMode ? 'text-gray-900' : 'text-gray-500'}`}>
+                  <span className={`text-xs md:text-sm font-medium ${!isTransliterateMode ? 'text-gray-900' : 'text-gray-500'}`}>
                     Sanscript
                   </span>
                   <HoverCard>
@@ -128,7 +128,7 @@ function App() {
                   onCheckedChange={setIsTransliterateMode}
                 />
                 <div className="flex items-center gap-1.5">
-                  <span className={`text-sm font-medium ${isTransliterateMode ? 'text-gray-900' : 'text-gray-500'}`}>
+                  <span className={`text-xs md:text-sm font-medium ${isTransliterateMode ? 'text-gray-900' : 'text-gray-500'}`}>
                     Google Input
                   </span>
                   <HoverCard>
@@ -154,10 +154,10 @@ function App() {
           {/* Main Content Card */}
           <div className="bg-white rounded-lg shadow-md border border-gray-200">
             {isTransliterateMode ? (
-              <div className="p-6 space-y-6">
+              <div className="p-4 md:p-6 space-y-4 md:space-y-6">
                 {/* Language Selector */}
-                <div className="flex flex-col gap-3">
-                  <Label className="text-base font-semibold text-gray-900">
+                <div className="flex flex-col gap-2 md:gap-3">
+                  <Label className="text-sm md:text-base font-semibold text-gray-900">
                     Select Language
                   </Label>
                   <Select
@@ -183,22 +183,19 @@ function App() {
                 </div>
 
                 {/* Input Area */}
-                <div className="flex flex-col gap-3">
-                  <Label className="text-base font-semibold text-gray-900">
-                    Type Here
-                  </Label>
+                <div className="flex flex-col gap-2 md:gap-3">
                   <Transliterate lang={transliterationLang} />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-[10px] md:text-xs text-gray-500 mt-1">
                     Start typing in Roman script and select from suggestions
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="p-6 space-y-6">
+              <div className="p-4 md:p-6 space-y-4 md:space-y-6">
                 {/* Script Selectors */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-3">
-                    <Label className="text-base font-semibold text-gray-900">
+                <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                  <div className="flex flex-col gap-2 md:gap-3">
+                    <Label className="text-sm md:text-base font-semibold text-gray-900">
                       From (Input Script)
                     </Label>
                     <Select
@@ -220,8 +217,8 @@ function App() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <Label className="text-base font-semibold text-gray-900">
+                  <div className="flex flex-col gap-2 md:gap-3">
+                    <Label className="text-sm md:text-base font-semibold text-gray-900">
                       To (Output Script)
                     </Label>
                     <Select
@@ -246,28 +243,28 @@ function App() {
                 </div>
 
                 {/* Input Textarea */}
-                <div className="flex flex-col gap-3">
-                  <Label className="text-base font-semibold text-gray-900">
+                <div className="flex flex-col gap-2 md:gap-3">
+                  <Label className="text-sm md:text-base font-semibold text-gray-900">
                     Input Text
                   </Label>
                   <Textarea
                     value={sanscriptInput}
                     onChange={(e) => setSanscriptInput(e.target.value)}
                     placeholder={`Enter text in ${scripts[inputScript]}...`}
-                    className="min-h-[180px] text-base resize-none"
+                    className="min-h-[180px] text-sm md:text-base resize-none"
                   />
                 </div>
 
                 {/* Output Area */}
                 {sanscriptInput && (
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2 md:gap-3">
                     <div className="flex items-center justify-between">
-                      <Label className="text-base font-semibold text-gray-900">
+                      <Label className="text-sm md:text-base font-semibold text-gray-900">
                         Output Text
                       </Label>
                       <button
                         onClick={() => handleCopy(Sanscript.t(sanscriptInput, inputScript, outputScript), setCopiedSanscript)}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                        className="inline-flex items-center gap-2 px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
                         title="Copy to clipboard"
                       >
                         {copiedSanscript ? (
@@ -284,7 +281,7 @@ function App() {
                       </button>
                     </div>
                     <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 min-h-[180px]">
-                      <p className="text-base text-gray-900 leading-relaxed whitespace-pre-wrap">
+                      <p className="text-sm md:text-base text-gray-900 leading-relaxed whitespace-pre-wrap">
                         {Sanscript.t(sanscriptInput, inputScript, outputScript)}
                       </p>
                     </div>

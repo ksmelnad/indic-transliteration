@@ -6,6 +6,7 @@ import {
 } from "../transliterate/core";
 import { Textarea } from "./ui/textarea";
 import { Copy, Check } from "lucide-react";
+import { Label } from "./ui/label";
 
 export interface TransliterateProps {
   lang: LanguageCode;
@@ -230,20 +231,23 @@ export const Transliterate: React.FC<TransliterateProps> = ({ lang }) => {
 
   return (
     <div className="relative w-full space-y-2">
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <Label className="text-sm md:text-base font-semibold text-gray-900">
+          Type Here
+        </Label>
         <button
           onClick={handleCopy}
           disabled={!text}
-          className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-md transition-colors ${!text
-              ? 'text-gray-300 cursor-not-allowed'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+          className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm md:text-base rounded-md transition-colors ${!text
+            ? 'text-gray-300 cursor-not-allowed'
+            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}
           title={text ? "Copy to clipboard" : "No text to copy"}
         >
           {copied ? (
             <>
               <Check className="w-4 h-4 text-green-600" />
-              <span className="text-green-600">Copied!</span>
+              <span className="text-green-600 text-sm md:text-base">Copied!</span>
             </>
           ) : (
             <>
