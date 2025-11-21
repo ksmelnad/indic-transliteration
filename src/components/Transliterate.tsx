@@ -5,6 +5,7 @@ import {
   type LanguageCode,
 } from "../transliterate/core";
 import { Textarea } from "./ui/textarea";
+import { Copy, Check } from "lucide-react";
 
 export interface TransliterateProps {
   lang: LanguageCode;
@@ -127,7 +128,18 @@ export const Transliterate: React.FC<TransliterateProps> = ({ lang }) => {
     top: 0,
     left: 0,
   });
+  const [copied, setCopied] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text:', err);
+    }
+  };
 
   const updateSuggestionsPosition = () => {
     if (textareaRef.current) {
@@ -217,7 +229,30 @@ export const Transliterate: React.FC<TransliterateProps> = ({ lang }) => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full space-y-2">
+      <div className="flex justify-end">
+        <button
+          onClick={handleCopy}
+          disabled={!text}
+          className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-md transition-colors ${!text
+              ? 'text-gray-300 cursor-not-allowed'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            }`}
+          title={text ? "Copy to clipboard" : "No text to copy"}
+        >
+          {copied ? (
+            <>
+              <Check className="w-4 h-4 text-green-600" />
+              <span className="text-green-600">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy className="w-4 h-4" />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
+      </div>
       <Textarea
         ref={textareaRef}
         value={text}
